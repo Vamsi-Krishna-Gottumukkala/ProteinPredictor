@@ -20,7 +20,6 @@ Extract the .rar file into the project root.
 
 Ensure your directory structure looks like this:
 
-Plaintext
 ProteinPredictor/
 
 ├── dataset/ # .csv and .npy files
