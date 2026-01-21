@@ -22,6 +22,7 @@ Ensure your directory structure looks like this:
 
 Plaintext
 ProteinPredictor/
+
 ├── dataset/ # .csv and .npy files
 
 ├── models/ # .h5 weight files
