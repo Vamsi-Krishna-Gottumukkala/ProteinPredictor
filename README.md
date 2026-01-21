@@ -23,9 +23,13 @@ Ensure your directory structure looks like this:
 Plaintext
 ProteinPredictor/
 ├── dataset/ # .csv and .npy files
+
 ├── models/ # .h5 weight files
+
 ├── src/ # Source code
+
 ├── web_app/ # Flask application
+
 └── main.py
 
 ### 3. Install Dependencies
