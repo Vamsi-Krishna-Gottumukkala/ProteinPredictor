@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ProteoScan AI</title>
+    <!-- Google Fonts for sleek tech look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/styles.css" />
+    <!-- 3Dmol.js -->
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="main-header">
+        <div class="logo">
+          <span class="logo-text"
+            >ProteoScan <span class="logo-accent">AI</span></span
+          >
+        </div>
+        <nav class="main-nav">
+          <a href="#" class="nav-link active">Dashboard</a>
+          <a href="#" class="nav-link">Molecular Library</a>
+          <a href="#" class="nav-link">API Documentation</a>
+        </nav>
+        <div class="user-profile">
+          <div class="user-avatar">GV</div>
+        </div>
+      </header>
+
+      <!-- Input Section -->
+      <section class="input-section">
+        <div class="section-title">
+          <span class="icon">✨</span> FASTA / Amino Acid Sequence Input
+        </div>
+        <div class="input-wrapper">
+          <textarea
+            id="sequence-input"
+            placeholder="Paste your FASTA sequence here...
+
+Example:
+>sp|P12345|PROTEIN_NAME
+MKFLKFSLLTAVLLSVVFAFSSCGDDDTGYLPPSQAIQDLLQRVEAEQMQREGFQGLDRVEAEAGGGG"
+          ></textarea>
+        </div>
+        <button id="predict-btn" class="btn-primary">
+          <span class="btn-icon">▶</span> Run Prediction
+        </button>
+      </section>
+
+      <!-- Main Content Grid -->
+      <div class="dashboard-grid">
+        <!-- Left: Search History -->
+        <aside class="sidebar-history">
+          <div class="section-title">
+            <span class="icon">↺</span> Search History
+          </div>
+          <div class="history-list">
+            <!-- Cards will be added dynamically usually, hardcoded for demo feel -->
+            <div class="history-card active">
+              <div class="history-icon cyan"></div>
+              <div class="history-info">
+                <h4>Current Prediction</h4>
+                <span class="history-meta">Just now</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Center: 3D Viewer -->
+        <main class="viewer-container">
+          <div class="viewer-controls">
+            <div class="control-group">
+              <div class="control-item"></div>
+              <div class="control-instructions">
+                <div class="instruction">
+                  <span class="key-icon">↺</span>
+                  <div>
+                    <strong>Rotate</strong>
+                    <span>Left Click + Drag</span>
+                  </div>
+                </div>
+                <div class="instruction">
+                  <span class="key-icon">⇲</span>
+                  <div>
+                    <strong>Zoom</strong>
+                    <span>Scroll Wheel</span>
+                  </div>
+                </div>
+              </div>
+              <button id="toggle-hands-btn" class="btn-secondary">
+                Enable Hand Tracking
+              </button>
+            </div>
+          </div>
+          <!-- 3D Mol Container -->
+          <div id="mol-viewer" class="mol-canvas"></div>
+        </main>
+
+        <!-- Right: Metrics -->
+        <aside class="sidebar-metrics">
+          <div class="section-title">
+            <span class="icon">📊</span> Structure Metrics
+          </div>
+
+          <div class="metric-card cyan-card">
+            <div class="metric-header">
+              <span>Confidence Score (pLDDT)</span>
+            </div>
+            <div class="metric-value" id="metric-confidence">--%</div>
+            <div class="progress-bar-bg">
+              <div
+                class="progress-bar-fill"
+                id="conf-bar"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+
+          <div class="metric-card dark-card">
+            <div class="metric-header">
+              <span>Atomic Clashes</span>
+              <span class="metric-icon">💥</span>
+            </div>
+            <div class="metric-value big-purple" id="metric-clashes">--</div>
+            <div class="metric-meta">steric overlaps</div>
+          </div>
+
+          <div class="metric-card dark-card">
+            <div class="metric-header">
+              <span>Bond Deviation</span>
+              <span class="metric-icon">📏</span>
+            </div>
+            <div class="metric-value" id="metric-bond">-- Å</div>
+            <div class="metric-meta">avg deviation</div>
+          </div>
+
+          <div class="metric-card dark-card">
+            <div class="metric-header">
+              <span>Hydrophobic Packing</span>
+              <span class="metric-icon">💧</span>
+            </div>
+            <div class="metric-value" id="metric-hydro">--</div>
+            <div class="metric-meta">core density score</div>
+          </div>
+
+          <div class="metric-card dark-card">
+            <div class="metric-header">
+              <span>Sequence Length</span>
+              <span class="metric-icon">≡</span>
+            </div>
+            <div class="metric-value big-blue" id="metric-length">-- aa</div>
+          </div>
+
+          <div class="metric-card dark-card">
+            <div class="metric-header">
+              <span>Molecular Weight</span>
+              <span class="metric-icon">⚖</span>
+            </div>
+            <div class="metric-value big-purple" id="metric-weight">-- kDa</div>
+          </div>
+
+          <div class="metric-card dark-card">
+            <div class="metric-header">
+              <span>Secondary Structure</span>
+            </div>
+            <div class="ss-stats">
+              <div class="ss-item">
+                <span class="ss-dot helix"></span>
+                <span id="ss-helix">H: 0</span>
+              </div>
+              <div class="ss-item">
+                <span class="ss-dot sheet"></span>
+                <span id="ss-sheet">S: 0</span>
+              </div>
+              <div class="ss-item">
+                <span class="ss-dot coil"></span>
+                <span id="ss-coil">C: 0</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- MediaPipe Dependencies -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Logic -->
+    <script src="/static/js/viewer.js?v=11"></script>
+    <script src="/static/js/hand_controls.js?v=6"></script>
+
+    <!-- Hand Control UI -->
+    <!-- Hand Control Overlay Elements -->
+    <div
+      style="
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        z-index: 2000;
+        pointer-events: none;
+      "
+    >
+      <video id="webcam-video" style="display: none"></video>
+      <canvas id="output-canvas" style="display: none"></canvas>
+      <div id="gesture-feedback" class="gesture-feedback">Detected: None</div>
+    </div>
+  </body>
+</html>

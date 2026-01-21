@@ -1,0 +1,27 @@
+==================================================
+  QUALITY ASSESSMENT REPORT
+==================================================
+
+Sequence Length: 37 residues
+
+--- Global Metrics ---
+Estimated RMSD: 1.86 Å
+Mean Confidence: 74.8%
+Atomic Clashes: 8
+Avg Bond Deviation: 0.004 Å
+Avg Angle Deviation: 1.2°
+Hydrophobic Score: 0.35
+Radius of Gyration: 19.7 Å
+
+--- Confidence Distribution ---
+[HIGH]   High (>=70%): 22 residues
+[MEDIUM] Medium (40-70%): 15 residues
+[LOW]    Low (<40%): 0 residues
+
+--- Per-Residue Confidence ---
+   1: MKTAYIAKQR |  49  59  58  61  87  81  82  86  86  85
+  11: QISFVKSHFS |  84  64  64  65  65  62  82  81  86  82
+  21: RQDILDLWIY |  64  84  64  83  84  84  83  83  83  86
+  31: HTQGYFP    |  87  66  66  61  57  71  71
+
+==================================================
